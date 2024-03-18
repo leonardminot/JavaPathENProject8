@@ -121,7 +121,10 @@ public class TestTourGuideService {
 
 		tourGuideService.tracker.stopTracking();
 
-		assertEquals(10, providers.size());
+		System.out.println(providers);
+
+		// TODO : Je ne vois pas pourquoi cela est 120 sachant qu'il y a une boucle qui le limite à 5.
+		assertEquals(5, providers.size());
 	}
 
 }
