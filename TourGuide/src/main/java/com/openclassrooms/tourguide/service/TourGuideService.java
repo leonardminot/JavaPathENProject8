@@ -22,7 +22,7 @@ import java.util.stream.IntStream;
 
 @Service
 public class TourGuideService {
-    private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
+    private final Logger logger = LoggerFactory.getLogger(TourGuideService.class);
     private final GpsUtil gpsUtil;
     private final RewardsService rewardsService;
     private final TripPricer tripPricer = new TripPricer();
@@ -78,7 +78,7 @@ public class TourGuideService {
         return providers;
     }
 
-    public VisitedLocation trackUserLocation(User user) {
+    public VisitedLocation trackUserLocation(User user){
         VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
         user.addToVisitedLocations(visitedLocation);
         rewardsService.calculateRewards(user);
@@ -118,7 +118,6 @@ public class TourGuideService {
     }
 
     /**********************************************************************************
-     *
      * Methods Below: For Internal Testing
      *
      **********************************************************************************/
