@@ -78,6 +78,7 @@ public class TourGuideService {
         return providers;
     }
 
+    //Todo : cette méthode ne devrait-être pas avoir un retour CompletableFuture<VisitedLocation> ?
     public VisitedLocation trackUserLocation(User user){
         VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
         user.addToVisitedLocations(visitedLocation);

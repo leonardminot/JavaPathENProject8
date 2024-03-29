@@ -65,7 +65,7 @@ public class TestRewardsService {
 		rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
 
 		// On attend que tous les calculs soient terminés
-		await().atMost(20, TimeUnit.SECONDS).until(() -> (tourGuideService.getAllUsers().get(0).getUserRewards().size() == 26));
+		await().atMost(5, TimeUnit.SECONDS).until(() -> (tourGuideService.getAllUsers().get(0).getUserRewards().size() == 26));
 
 		List<UserReward> userRewards = tourGuideService.getUserRewards(tourGuideService.getAllUsers().get(0));
 		tourGuideService.tracker.stopTracking();
