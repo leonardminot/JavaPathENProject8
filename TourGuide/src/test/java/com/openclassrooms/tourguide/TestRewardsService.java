@@ -14,6 +14,7 @@ import rewardCentral.RewardCentral;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -54,7 +55,7 @@ public class TestRewardsService {
 
 //	@Disabled // Needs fixed - can throw ConcurrentModificationException
 	@Test
-	public void nearAllAttractions() {
+	public void nearAllAttractions() throws ExecutionException, InterruptedException {
 		GpsUtil gpsUtil = new GpsUtil();
 		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
 		rewardsService.setProximityBuffer(Integer.MAX_VALUE);
@@ -62,10 +63,9 @@ public class TestRewardsService {
 		InternalTestHelper.setInternalUserNumber(1);
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 
-		rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
+		CompletableFuture<Void> future = rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
 
-		// On attend que tous les calculs soient terminés
-		await().atMost(5, TimeUnit.SECONDS).until(() -> (tourGuideService.getAllUsers().get(0).getUserRewards().size() == 26));
+		future.get();
 
 		List<UserReward> userRewards = tourGuideService.getUserRewards(tourGuideService.getAllUsers().get(0));
 		tourGuideService.tracker.stopTracking();
