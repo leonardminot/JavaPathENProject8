@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestRewardsService {
 
 	@Test
-	public void userGetRewards() {
+	public void userGetRewards() throws ExecutionException, InterruptedException {
 		GpsUtil gpsUtil = new GpsUtil();
 		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
 
@@ -35,10 +35,10 @@ public class TestRewardsService {
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		Attraction attraction = gpsUtil.getAttractions().get(0);
 		user.addToVisitedLocations(new VisitedLocation(user.getUserId(), attraction, new Date()));
-		tourGuideService.trackUserLocation(user);
 
-		//Ajouter pour les tests : Il faut attendre d'avoir un résultat
-		await().atMost(10, TimeUnit.SECONDS).until(() -> !user.getUserRewards().isEmpty());
+		CompletableFuture<VisitedLocation> visitedLocationCompletableFuture = tourGuideService.trackUserLocation(user);
+
+		visitedLocationCompletableFuture.get();
 
 		List<UserReward> userRewards = user.getUserRewards();
 		tourGuideService.tracker.stopTracking();

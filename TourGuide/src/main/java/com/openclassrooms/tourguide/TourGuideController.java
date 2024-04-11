@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tripPricer.Provider;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 public class TourGuideController {
@@ -29,7 +30,7 @@ public class TourGuideController {
     }
     
     @RequestMapping("/getLocation") 
-    public VisitedLocation getLocation(@RequestParam String userName) {
+    public VisitedLocation getLocation(@RequestParam String userName) throws ExecutionException, InterruptedException {
     	return tourGuideService.getUserLocation(getUser(userName));
     }
     
@@ -43,7 +44,7 @@ public class TourGuideController {
         // The reward points for visiting each Attraction.
         //    Note: Attraction reward points can be gathered from RewardsCentral
     @RequestMapping("/getNearbyAttractions") 
-    public List<NearbyAttraction> getNearbyAttractions(@RequestParam String userName) {
+    public List<NearbyAttraction> getNearbyAttractions(@RequestParam String userName) throws ExecutionException, InterruptedException {
     	VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
     	return tourGuideService.getNearByAttractions(visitedLocation, getUser(userName));
     }
